@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>aos</title>
+  <link rel="stylesheet" type="text/css" href="/node_modules/aos/dist/aos.css">
+  <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="/node_modules/aos/dist/aos.js"></script>
+</head>
+
+<style>
+
+.emptyDiv {
+  min-height: 100vh;
+  margin-bottom: 10px;
+  padding: 10px;
+  color: white;
+  text-transform: uppercase;
+}
+
+.foo {
+  min-height: 50vh;
+  width: 98vw;
+  margin-bottom: 20vh;
+  padding: 10px;
+  color: white;
+  text-transform: uppercase;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center center;
+}
+
+.foo-1 {
+  background-image: url("/img/img1.jpg")
+}
+
+.foo-2 {
+  background-image: url("/img/img2.jpg")
+}
+
+.foo-3 {
+  background-image: url("/img/img3.jpg")
+}
+
+.foo-4 {
+  background-image: url("/img/img4.jpg")
+}
+
+
+
+
+</style>
+<body>
+  <div class="emptyDiv"></div>
+
+  <div class="foo foo-1" data-aos="fade-up"></div>
+
+  <div class="foo foo-4" data-aos="zoom-in"></div>
+
+  <div class="emptyDiv"></div>
+  <div class="emptyDiv"></div>
+
+<script>
+
+$(document).ready(function() {
+  AOS.init({
+    duration: 500,
+    delay : 250,
+  })
+})
+
+</script>
+
+</body>
+</html>

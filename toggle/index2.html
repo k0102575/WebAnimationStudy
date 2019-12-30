@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/2.0.2/velocity.min.js"></script>
+  <title>cantact</title>
+<style>
+
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-color: lightblue;
+}
+
+.contact-container {
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100;
+  display: none;
+}
+
+.contact-blind-container {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  position: absolute;
+  background-color: black;
+  opacity: 0.9;
+  z-index: 101;
+  display: none;
+}
+
+.contact-modal-container {
+  height: 100vh;
+  top: 0;
+  right: 0;
+  position: absolute;
+  background-color: lightyellow;
+  z-index: 102;
+  display: none;
+}
+
+@media only screen
+and (max-width : 767px) {
+
+  .contact-blind-container {
+    width: 50vw;
+  }
+
+  .contact-modal-container {
+    width: 50vw;
+  }
+}
+
+@media only screen
+and (min-width : 768px)
+and (max-width : 1024px) {
+
+  .contact-blind-container {
+    width: 50vw;
+  }
+
+  .contact-modal-container {
+    width: 50vw;
+  }
+}
+
+@media only screen
+and (min-width : 1025px){
+
+  .contact-blind-container {
+    width: 50vw;
+  }
+
+  .contact-modal-container {
+    width: 50vw;
+  }
+}
+
+.buttonDiv {
+  height: 50px;
+  width: 200px;
+  position: relative;
+  top: 10vh;
+  left: 10vw;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 2px;
+  color: #b9b9b9;
+  background-color: #191919;
+}
+
+.buttonDiv2 {
+  height: 50px;
+  width: 200px;
+  position: relative;
+  top: 10vh;
+  left: 25vw;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 2px;
+  color: #b9b9b9;
+  background-color: #191919;
+}
+
+.buttonDiv3 {
+  height: 50px;
+  width: 200px;
+  position: relative;
+  top: 10vh;
+  left: 50vw;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 2px;
+  color: #b9b9b9;
+  background-color: #191919;
+}
+
+.emptyDiv {
+  min-height: 50vh;
+  margin-bottom: 10px;
+  color: white;
+  background-color: #333;
+}
+
+</style>
+</head>
+<body>
+
+<button type="button" class="buttonDiv">문의하기</button>
+<button type="button" class="buttonDiv2">문의하기2</button>
+<button type="button" class="buttonDiv3">문의하기3</button>
+
+
+<div class="container-lg contact-container">
+  <div class="contact-blind-container"></div>
+  <div class="contact-modal-container">
+    <div class="row contact-modal-row">
+    </div>
+  </div>
+</div>
+
+<div class="emptyDiv"></div>
+<div class="emptyDiv"></div>
+<div class="emptyDiv"></div>
+
+<script>
+
+var modalEnd = false,
+    modalEventSpeed = 500
+
+$(document).ready(function() {
+  contactModalEvent.init($(".buttonDiv"))
+  contactModalEvent.init($(".buttonDiv2"))
+  contactModalEvent.init($(".buttonDiv3"))
+})
+
+var contactModalEvent = {
+     init: function (a) {
+
+       a.on('click', function() {
+         if(modalEnd == true) {
+           return;
+         }
+
+         $("html, body").css("overflow", "hidden")
+         $("html, body").css("-ms-overflow-style", "none")
+         $(".contact-blind-container").bind('touchmove', function(e){e.preventDefault()});
+         $(".contact-modal-container").bind('touchmove', function(e){e.preventDefault()});
+
+         $(".contact-container").toggle(0, function() {
+           $(".contact-blind-container").toggle('slide', {direction : 'left', easing : 'linear'}, modalEventSpeed)
+           $(".contact-modal-container").toggle("slide", {direction : 'right', easing : 'linear'}, modalEventSpeed)
+         });
+
+         modalEnd = true
+       })
+
+       $(".contact-blind-container").on("click", function() {
+
+         if(modalEnd == false) {
+           return;
+         }
+
+         $(".contact-blind-container").toggle('slide', {direction : 'left', easing : 'linear'}, modalEventSpeed)
+
+         $(".contact-modal-container").toggle("slide", {direction : 'right', easing : 'linear'}, modalEventSpeed, function() {
+           $(".contact-container").toggle(0, function() {
+             $("html, body").css("overflow", "auto")
+             $("html, body").css("-ms-overflow-style", "auto")
+             $(".contact-blind-container").unbind('touchmove');
+             $(".contact-modal-container").unbind('touchmove');
+
+           })
+         })
+
+         modalEnd = false;
+
+       })
+
+    } // init()
+  };
+
+</script>
+</body>
+</html>

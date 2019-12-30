@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>scrollreveal</title>
+  <script src="/node_modules/scrollreveal/dist/scrollreveal.min.js"></script>
+</head>
+
+<style>
+
+.emptyDiv {
+  min-height: 100vh;
+  margin-bottom: 10px;
+  padding: 10px;
+  color: white;
+  text-transform: uppercase;
+}
+
+.foo {
+  min-height: 50vh;
+  width: 98vw;
+  margin-bottom: 10vh;
+  padding: 10px;
+  color: white;
+  text-transform: uppercase;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center center;
+}
+
+.foo-1 {
+  background-image: url("/img/img1.jpg")
+}
+
+.foo-2 {
+  background-image: url("/img/img2.jpg")
+}
+
+.foo-3 {
+  background-image: url("/img/img3.jpg")
+}
+
+.foo-4 {
+  background-image: url("/img/img4.jpg")
+}
+
+
+
+
+</style>
+<body>
+  <div class="emptyDiv"></div>
+
+  <div class="foo  foo-1"></div>
+
+  <div class="foo  foo-2"></div>
+
+  <div class="foo  foo-3"></div>
+
+  <div class="foo  foo-4"></div>
+
+  <div class="emptyDiv"></div>
+  <div class="emptyDiv"></div>
+
+
+<script>
+// GENERAL SETTING
+window.sr = ScrollReveal({ reset: false });
+
+// Custom Settings
+sr.reveal('.foo-1', {
+  duration: 2500
+});
+
+sr.reveal('.foo-2', {
+  duration: 2500
+});
+
+sr.reveal('.foo-3', {
+  duration: 2500
+});
+
+sr.reveal('.foo-4', {
+  duration: 2500
+});
+
+</script>
+
+</body>
+</html>

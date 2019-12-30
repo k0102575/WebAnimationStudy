@@ -1,2 +1,1 @@
-# WebAnimationStudy
-WebAnimationStudy
+홈페이지 리뉴얼 애니메이션 관련 스터디 정리 자료

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/velocity-animate@1.5/velocity.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenMax.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/animation.gsap.js"></script>
+  <title>buttonHover</title>
+  <style>
+  body {
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+  }
+
+  .buttonDiv {
+    height: 50px;
+    width: 200px;
+    position: relative;
+    top: 10vh;
+    left: 10vw;
+    display: block;
+    font-size: 12px;
+    line-height: 18px;
+    letter-spacing: 2px;
+    color: #b9b9b9;
+    background: linear-gradient(to right, #fff 33%, #191919 67%);
+    background-size: 300% 100%;
+    background-position: right bottom;
+    transition: all .3s ease-out !important;
+  }
+
+  .buttonDiv:hover {
+    color:#000 !important;
+    background-position:left bottom;
+    border-color:white !important
+  }
+
+  .buttonHover {
+    height: 18px;
+    width: 110px;
+    display: block;
+    position: absolute;
+    margin-top: 15px;
+    margin-left: 40px;
+    z-index: 11;
+  }
+
+  </style>
+
+  <!--[if IE 9]>
+  <style>
+
+    .buttonDivContainer {
+      position: relative;
+      top: 20vh;
+      left: 20vw;
+      height: 50px;
+      width: 200px;
+      background: #191919;
+    }
+
+    .buttonDiv {
+      height: 50px;
+      width: 200px;
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      display: block;
+      font-size: 12px;
+      line-height: 18px;
+      letter-spacing: 2px;
+      color: #b9b9b9;
+      background: none;
+      z-index: 3;
+    }
+
+    .graDiv {
+      position: absolute;
+      height: 50px;
+      width: 0px;
+      left: 0px;
+      background: white;
+      z-index: 1;
+    }
+
+  </style>
+  <![endif]-->
+</head>
+<body>
+
+  <!--[if IE 9]>
+  <div class="buttonDivContainer">
+  <![endif]-->
+    <a href="#" class="buttonDiv">
+      <span class="buttonHover">AI-IOT 알아보기</span>
+    </a>
+  <!--[if IE 9]>
+    <div class="graDiv"></div>
+  </div>
+  <![endif]-->
+
+<!--[if IE 9]>
+<script>
+$(".buttonDiv").hover(function(){
+  $(".graDiv").velocity({
+    width: "200px"
+  }, {
+    duration: 300,
+    easing: "linear",
+    delay: 0
+  })
+}, function(){
+  $(".graDiv").velocity({
+    width: "0px"
+  }, {
+    duration: 300,
+    easing: "linear",
+    delay: 0
+  })
+})
+</script>
+<![endif]-->
+
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>text</title>
+  <link rel="stylesheet" type="text/css" href="/node_modules/animate.css/animate.min.css">
+  <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="/node_modules/letteringjs/jquery.lettering.js"></script>
+  <script src="/node_modules/textillate/jquery.textillate.js"></script>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <style>
+  html,
+  body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+  }
+  .test {
+    z-index: 30;
+    color: white;
+    position: absolute;
+    font-size: 2rem;
+    top: 10vh;
+    }
+  </style>
+</head>
+<body>
+      <div id="blurDiv"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-xl">
+            <p class="test">IoT-AI 기반 데이터 분석으로<br/>
+              비즈니스에 혁신을 가져옵니다
+            </p>
+          </div>
+          <div class="col-xl">
+          </div>
+        </div>
+      </div>
+<script>
+$(document).ready(function() {
+  requestAnimationFrame(loadingComplete)
+  $('.test').textillate({
+   in: {
+       effect: 'fadeInUp',
+       shuffle: false,
+       sync: false,
+       reverse: false,
+       delay: 20,
+       delayscale: 1,
+       callback: function () {
+       }
+   },
+   out: {
+     effect: 'fadeOutDown',
+     shuffle: false,
+     sync: false,
+     reverse: false,
+     delay: 20,
+     delayscale: 1,
+     callback: function () {
+     }
+   },
+   loop: false,
+   autoStart: false,
+})
+}); // document.ready()
+function loadingComplete() {
+  $(".test").textillate('in')
+}
+
+</script>
+</body>
+</html>

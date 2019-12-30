@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>dot</title>
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenMax.min.js"></script>
+<style>
+
+body {
+  margin: 0px;
+}
+
+.backgroundDiv {
+  width: 100vw;
+  height: 100vh;
+  background-color: #333;
+  top: 0;
+  left: 0;
+  position: relative;
+}
+
+#canvas {
+  top: 0;
+  left: 0;
+}
+
+.logoDiv {
+  position: absolute;
+  top: 50vh;
+  left: 30vw;
+  z-index: 10
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="backgroundDiv">
+  <canvas id="canvas"></canvas>
+  <div class="logoDiv"/>
+    <img src="/img/Triplet_CI_White.png" class="img-responsive" alt="">
+  </div>
+</div>
+
+
+<script>
+
+$(document).ready(function() {
+
+  window.addEventListener("resize", function(){
+	  resizeCanvas();
+  });
+
+  init();
+  loop();
+})
+
+var stage,
+		stageCtx,
+		stageWidth   = $(".backgroundDiv").width(),
+		stageHeight  = $(".backgroundDiv").height(),
+		dots = [],
+		numberPixelCoordinates,
+		circleRadius = 2.5,
+		colors = ['000, 102, 000', '255, 255, 0', '255, 000, 255', '255,051,051', '000,051,153', '255,255,255'],
+    direction = 'r',
+    widthMin = 150,
+    widthMax = stageWidth - 150,
+    heightMin = 150,
+    heightMax = stageHeight - 150,
+    duration = 2,
+    delay = 0;
+
+function init() {
+  stage = document.getElementById("canvas");
+  stageCtx = stage.getContext('2d');
+  stage.width = stageWidth;
+  stage.height = stageHeight;
+
+  for (var i = 0; i < 200; i++) {
+
+  	// Create a dot
+  	var dot = new Dot(randomNumber(widthMin, widthMax), randomNumber(heightMin, heightMax), colors[randomNumber(0, colors.length)], 1);
+
+  	// Push to into an array of dots
+  	dots.push(dot);
+
+  	// Animate dots
+  	tweenDots(dot, direction, widthMin, widthMax, heightMin, heightMax, duration, delay);
+  }
+}
+
+function resizeCanvas() {
+  stageWidth   = $(".backgroundDiv").width();
+  stageHeight  = $(".backgroundDiv").height();
+  widthMin = 150,
+  widthMax = stageWidth - 150,
+  heightMin = 150,
+  heightMax = stageHeight - 150;
+  dots = []
+  init()
+}
+
+function Dot(x, y, color, alpha) {
+
+	var _this = this;
+
+	_this.x = x;
+	_this.y = y;
+	_this.color = color;
+	_this.alpha = alpha;
+
+	this.draw = function() {
+		stageCtx.beginPath();
+		stageCtx.arc(_this.x, _this.y, circleRadius, 0, 2*Math.PI, false);
+		stageCtx.fillStyle = 'rgba(' + _this.color + ', ' + _this.alpha + ')';
+		stageCtx.fill();
+	}
+
+}
+
+function loop() {
+
+  stageCtx.clearRect(0,0,stageWidth, stageHeight);
+
+  stageCtx.globalCompositeOperation = "source-over";
+
+	for(var i = 0; i < dots.length; i++) {
+   	dots[i].draw(stageCtx);
+  }
+
+	requestAnimationFrame(loop);
+}
+
+function tweenDots(dot, direction, widthMin, widthMax, heightMin, heightMax, duration, delay) {
+
+  var _this = this;
+
+  _this.direction = direction;
+  _this.widthMin = widthMin;
+  _this.widthMax = widthMax;
+  _this.heightMin = heightMin;
+  _this.heightMax = heightMax;
+  _this.duration = duration;
+  _this.delay = delay;
+
+  switch (_this.direction) {
+    case 'x':
+      TweenMax.to(dot, _this.duration, {
+        x: randomNumber(_this.widthMin, _this.widthMax),
+        alpha: 1,
+        ease: Cubic.easeInOut,
+        delay: _this.delay,
+        repeatDelay: _this.repeatDelay,
+        onComplete: function() {
+          tweenDots(dot, _this.direction, _this.widthMin, _this.widthMax, _this.heightMin, _this.heightMax, _this.duration, _this.delay);
+        }
+      });
+
+    break;
+
+    case 'y':
+      TweenMax.to(dot, _this.duration, {
+        y: randomNumber(_this.heightMin, _this.heightMax),
+        alpha: 1,
+        ease: Cubic.easeInOut,
+        delay: _this.delay,
+        repeatDelay: _this.repeatDelay,
+        onComplete: function() {
+          tweenDots(dot, _this.direction, _this.widthMin, _this.widthMax, _this.heightMin, _this.heightMax, _this.duration, _this.delay);
+        }
+      });
+
+    break;
+
+    case 'r':
+      TweenMax.to(dot, _this.duration, {
+        x: randomNumber(_this.widthMin, _this.widthMax),
+        y: randomNumber(_this.heightMin, _this.heightMax),
+        alpha: 1,
+        ease: Cubic.easeInOut,
+        delay: _this.delay,
+        repeatDelay: _this.repeatDelay,
+        onComplete: function() {
+          tweenDots(dot, _this.direction, _this.widthMin, _this.widthMax, _this.heightMin, _this.heightMax, _this.duration, _this.delay);
+        }
+      });
+
+    break;
+  }
+
+}
+
+function randomNumber(min, max) {
+	return Math.floor(Math.random() * (max - min) + min);
+}
+</script>
+
+</body>
+</html>

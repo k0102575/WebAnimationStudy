@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>falling</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+  .main {
+    height: 100vh;
+    z-index: 11;
+  }
+
+  .row {
+    height: 50%;
+    width: 100vw;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  #canvas {
+    position: absolute;
+    background: #232323;
+  }
+
+</style>
+</head>
+<body>
+
+
+<canvas id="canvas"></canvas>
+<div class="container-lg main">
+  <div class="row">
+  </div>
+  <div class="row" id="trigger1">
+</div>
+
+<script>
+
+// 캔버스 변수 선언
+
+var canvas = document.getElementById("canvas"),
+    ctx = canvas.getContext('2d'),
+    maxParts,
+    init = [],
+    w = $(".main").width(),
+    h = $(".main").height(),
+    fallingInterval
+
+
+$(document).ready(function() {
+
+  if (document.documentElement.clientWidth > 1024) {
+    maxParts = 200;
+  } else if ((document.documentElement.clientWidth >= 768) && (document.documentElement.clientWidth <= 1024)){
+    maxParts = 100;
+  } else if (document.documentElement.clientWidth < 768) {
+    maxParts = 50;
+  }
+
+  canvas.width = $(window).width()
+  canvas.height = $(window).height()
+
+  fallingInit()
+
+  window.addEventListener("resize", function(){
+
+    if (document.documentElement.clientWidth > 1024) {
+      maxParts = 200;
+    } else if ((document.documentElement.clientWidth >= 768) && (document.documentElement.clientWidth <= 1024)){
+      maxParts = 100;
+    } else if (document.documentElement.clientWidth < 768) {
+      maxParts = 50;
+    }
+
+    fallingInit()
+    resizeCanvas();
+  });
+
+})
+
+// falling 이벤트
+
+function resizeCanvas() {
+  canvas.width = $(".main").width();
+  canvas.height = $(".main").height();
+  w = $(".main").width()
+  h = $(".main").height()
+
+  clearInterval(fallingInterval)
+  init = []
+  fallingInit()
+}
+
+function fallingInit() {
+  canvas.width = $(".main").width();
+  canvas.height = $(".main").height();
+
+  for(var a = 0; a < maxParts; a++) {
+    init.push({
+      x: Math.random() * w,
+      y: (h+randomNumber(0,h)),
+      l: 30,
+      xs: 0,
+      ys: 10,
+      speed: randomNumber(1, 5)
+    })
+  }
+
+  fallingInterval = setInterval(draw, 30);
+}
+
+function draw() {
+  ctx.clearRect(0, 0, w, h);
+  for(var c = 0; c < init.length; c++) {
+    var p = init[c];
+
+    ctx.beginPath();
+
+    var grad= ctx.createLinearGradient(p.x, p.y, p.x + p.l * p.xs, p.y + p.l * p.ys);
+    grad.addColorStop(0, "rgba(150,150,150,1)");
+    grad.addColorStop(0.1, "rgba(150,150,150,0.9)");
+    grad.addColorStop(0.2, "rgba(150,150,150,0.8)");
+    grad.addColorStop(0.3, "rgba(150,150,150,0.7)");
+    grad.addColorStop(0.4, "rgba(150,150,150,0.6)");
+    grad.addColorStop(0.5, "rgba(150,150,150,0.5)");
+    grad.addColorStop(0.6, "rgba(150,150,150,0.4)");
+    grad.addColorStop(0.7, "rgba(150,150,150,0.3)");
+    grad.addColorStop(0.8, "rgba(150,150,150,0.2)");
+    grad.addColorStop(0.9, "rgba(150,150,150,0.1)");
+    grad.addColorStop(1, "rgba(150,150,150,0)");
+    ctx.strokeStyle = grad;
+
+    ctx.lineWidth = 1.5;
+    ctx.lineCap = 'round';
+    ctx.moveTo(p.x , p.y);
+    ctx.lineTo(p.x + p.l * p.xs, p.y + p.l * p.ys);
+    ctx.stroke();
+    move(p)
+  }
+}
+
+function move(p) {
+    p.x += p.xs;
+    p.y -= p.speed;
+
+    if(p.x > w || p.y < -(p.l*p.ys)) {
+      p.x = Math.random() * w;
+      p.y = h+randomNumber(0,h);
+    }
+}
+
+function randomNumber(min, max) {
+	return Math.random() * (max - min) + min;
+}
+
+</script>
+</body>
+</html>

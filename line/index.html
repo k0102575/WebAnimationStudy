@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dot</title>
+<script src="/node_modules/jquery/dist/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenMax.min.js"></script>
+<style>
+
+body {
+  margin: 0px;
+}
+
+.canvasDiv {
+  min-height: 50vh;
+  background-color: #333;
+  position: relative;
+}
+
+#canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#lineCanvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container-lg">
+  <div class="row-lg">
+    <div class=".col-xs-12 .col-sm-12 col-md-5 col-lg-5">
+
+    </div>
+    <div class=".col-xs-12 .col-sm-12 col-md-6 col-lg-6 canvasDiv">
+      <canvas id="lineCanvas"></canvas>
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+$(document).ready(function() {
+
+  if (document.documentElement.clientWidth < 768) {
+    mobileInit()
+  } else {
+    init()
+  }
+
+  window.addEventListener("resize", function(){
+    if (document.documentElement.clientWidth < 768) {
+      resizeMobileCanvas()
+    } else {
+      resizeCanvas()
+    }
+  });
+
+})
+
+var stage,
+		stageCtx,
+		stageWidth   = $(".canvasDiv").width(),
+		stageHeight  = $(".canvasDiv").height(),
+		circleRadius = 1,
+    canvas,
+    ctx,
+    canvasWidth   = $(".canvasDiv").width(),
+    canvasHeight  = $(".canvasDiv").height(),
+    widthPoint = canvasWidth /10,
+    heightPoint = canvasHeight / 10,
+    count = 0,
+    dotPointX = [],
+    dotPointY = [],
+    dotOpacity = [],
+    opacity = 0,
+    dot,
+    tweenAni,
+    minDistance = 10000,
+    duration = 3
+
+var point = []
+
+function resizeCanvas() {
+ stageWidth   = $(".canvasDiv").width();
+ stageHeight  = $(".canvasDiv").height();
+ canvasWidth   = $(".canvasDiv").width(),
+ canvasHeight  = $(".canvasDiv").height(),
+ widthPoint = canvasWidth / 10,
+ heightPoint = canvasHeight / 10
+ point = [[[widthPoint * 1.5, heightPoint * 2],[widthPoint * 2, heightPoint * 6],
+              [widthPoint * 4, heightPoint * 8],[widthPoint * 6.5, heightPoint * 8.5],
+              [widthPoint * 8.5, heightPoint * 4.5],[widthPoint * 6.5, heightPoint * 1.5]]]
+
+ opacity = 0
+ dotOpacity = []
+ minDistance = 10000
+ tweenAni.kill()
+ init();
+}
+
+function init() {
+  point = [[widthPoint * 1.5, heightPoint * 2],[widthPoint * 2, heightPoint * 6],
+               [widthPoint * 4, heightPoint * 8],[widthPoint * 6.5, heightPoint * 8.5],
+               [widthPoint * 8.5, heightPoint * 4.5],[widthPoint * 6.5, heightPoint * 1.5]]
+
+  stage = document.getElementById("canvas");
+  stageCtx = stage.getContext('2d');
+  stage.width = stageWidth;
+  stage.height = stageHeight;
+
+  canvas = document.getElementById("lineCanvas");
+  ctx = canvas.getContext('2d');
+  canvas.width = canvasWidth,
+  canvas.height = canvasHeight
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.beginPath();
+  ctx.strokeStyle = "rgba(255,255,255,0.1)"
+  ctx.moveTo(widthPoint * 1.5 , heightPoint * 2);
+  ctx.lineTo(widthPoint * 6.5, heightPoint * 1.5);
+  ctx.moveTo(widthPoint * 1.5 , heightPoint * 2);
+  ctx.lineTo(widthPoint * 2, heightPoint * 6);
+  ctx.moveTo(widthPoint * 1.5 , heightPoint * 2);
+  ctx.lineTo(widthPoint * 4, heightPoint * 8);
+  ctx.moveTo(widthPoint * 1.5 , heightPoint * 2);
+  ctx.lineTo(widthPoint * 8.5, heightPoint * 4.5);
+
+  ctx.moveTo(widthPoint * 8.5 , heightPoint * 4.5);
+  ctx.lineTo(widthPoint * 6.5, heightPoint * 8.5);
+  ctx.moveTo(widthPoint * 8.5 , heightPoint * 4.5);
+  ctx.lineTo(widthPoint * 4, heightPoint * 8);
+  ctx.moveTo(widthPoint * 8.5 , heightPoint * 4.5);
+  ctx.lineTo(widthPoint * 6.5, heightPoint * 1.5);
+
+  ctx.moveTo(widthPoint * 4 , heightPoint * 8);
+  ctx.lineTo(widthPoint * 2, heightPoint * 6);
+  ctx.moveTo(widthPoint * 4 , heightPoint * 8);
+  ctx.lineTo(widthPoint * 6.5, heightPoint * 8.5);
+
+  ctx.moveTo(widthPoint * 6.5 , heightPoint * 1.5);
+  ctx.lineTo(widthPoint * 2, heightPoint * 6);
+  ctx.moveTo(widthPoint * 6.5 , heightPoint * 1.5);
+  ctx.lineTo(widthPoint * 6.5, heightPoint * 8.5);
+
+  ctx.stroke();
+
+  dot = new Dot('nonM');
+
+  for(var i = 0; i < point.length; i++) {
+    for(var j =0; j< point.length; j++) {
+      var a = point[i][0] - point[j][0];
+      var b = point[i][1] - point[j][1];
+
+      var c = Math.sqrt( a*a + b*b );
+
+      if(c == 0 || minDistance == c) {
+        continue;
+      }
+
+      if(minDistance > c) {
+        minDistance = c
+      }
+
+    }
+  }
+
+  tweenDots(dot);
+
+}
+
+function tweenDots(dot) {
+
+  var randomArray = randomNumber(0, 6)
+
+  var nextX = point[randomArray][0],
+  nextY = point[randomArray][1]
+
+  if(dot.x == widthPoint * 2 && nextX == widthPoint * 8.5) {
+    tweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 8.5 && nextX == widthPoint * 2) {
+    tweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 2 && nextX == widthPoint * 6.5) {
+    tweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 6.5 && nextX == widthPoint * 2) {
+    tweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 6.5 && nextX == widthPoint * 1.5) {
+    tweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 1.5 && nextX == widthPoint * 6.5) {
+    tweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 4 && nextX == widthPoint * 6.5) {
+    tweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 6.5 && nextX == widthPoint * 4) {
+    tweenDots(dot);
+    return;
+  }
+
+  if(parseInt(dot.x) == parseInt(nextX) && parseInt(dot.y) == parseInt(nextY)) {
+    tweenDots(dot);
+    return;
+  }
+
+  var a = dot.x - nextX;
+  var b = dot.y - nextY;
+
+  var c = Math.sqrt( a*a + b*b );
+
+  var nextTime = c / minDistance
+
+  tweenAni = TweenMax.to(dot, duration * nextTime, {
+    x: point[randomArray][0],
+    y: point[randomArray][1],
+    delay: 0,
+    ease : "Linear",
+    onUpdate: function() {
+      stageCtx.clearRect(0,0,stageWidth, stageHeight);
+
+      for (var i = 0; i < dotPointX.length; i++) {
+
+        if(i <= 30) {
+          stageCtx.save();
+          stageCtx.globalCompositeOperation = 'destination-out';
+          stageCtx.beginPath();
+          stageCtx.arc(dotPointX[0], dotPointY[0], circleRadius + 2, 0, 2 * Math.PI, false);
+          stageCtx.fill();
+          stageCtx.restore();
+
+        } else {
+          dotPointX.splice(0,1)
+          dotPointY.splice(0,1)
+        }
+
+        dot.sdraw(dotPointX[i],dotPointY[i],dotOpacity[i]);
+
+      }
+
+      dot.draw()
+
+      dotPointX.push(dot.x)
+      dotPointY.push(dot.y)
+      dotOpacity.push(opacity)
+      opacity += 0.025
+
+    },
+    onComplete: function() {
+      stageCtx.clearRect(0,0,stageWidth, stageHeight);
+      opacity = 0
+      dotOpacity = []
+      tweenDots(dot);
+    }
+
+  })
+
+}
+
+function resizeMobileCanvas() {
+  point = [[widthPoint * 1.5, heightPoint * 2],[widthPoint * 2, heightPoint * 6],
+               [widthPoint * 4, heightPoint * 8],[widthPoint * 6.5, heightPoint * 8.5],
+               [widthPoint * 8.5, heightPoint * 4.5],[widthPoint * 6.5, heightPoint * 1.5]]
+  stageWidth   = $(".canvasDiv").width();
+  stageHeight  = $(".canvasDiv").height();
+  canvasWidth   = $(".canvasDiv").width(),
+  canvasHeight  = $(".canvasDiv").height(),
+  widthPoint = canvasWidth / 10,
+  heightPoint = canvasHeight / 10
+
+  opacity = 0
+  dotOpacity = []
+  minDistance = 10000
+  tweenAni.kill()
+  mobileInit();
+}
+
+function mobileInit() {
+  point = [[widthPoint * 2.5, heightPoint * 4],[widthPoint * 5.5, heightPoint * 2],
+               [widthPoint * 4.5, heightPoint * 7],[widthPoint * 8.5, heightPoint * 4.5],
+               [widthPoint * 7, heightPoint * 8]]
+
+  stage = document.getElementById("canvas");
+  stageCtx = stage.getContext('2d');
+  stage.width = stageWidth;
+  stage.height = stageHeight;
+
+  canvas = document.getElementById("lineCanvas");
+  ctx = canvas.getContext('2d');
+  canvas.width = canvasWidth,
+  canvas.height = canvasHeight
+
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.beginPath();
+  ctx.strokeStyle = "rgba(255,255,255,0.1)"
+  ctx.moveTo(widthPoint * 2.5 , heightPoint * 4);
+  ctx.lineTo(widthPoint * 5.5, heightPoint * 2);
+  ctx.moveTo(widthPoint * 2.5 , heightPoint * 4);
+  ctx.lineTo(widthPoint * 8.5, heightPoint * 4.5);
+
+  ctx.moveTo(widthPoint * 4.5 , heightPoint * 7);
+  ctx.lineTo(widthPoint * 7, heightPoint * 8);
+  ctx.moveTo(widthPoint * 4.5 , heightPoint * 7);
+  ctx.lineTo(widthPoint * 8.5, heightPoint * 4.5);
+  ctx.moveTo(widthPoint * 5.5 , heightPoint * 2);
+  ctx.lineTo(widthPoint * 7, heightPoint * 8);
+
+  ctx.stroke();
+
+  dot = new Dot('m');
+
+  for(var i = 0; i < point.length; i++) {
+    for(var j =0; j< point.length; j++) {
+      var a = point[i][0] - point[j][0];
+      var b = point[i][1] - point[j][1];
+
+      var c = Math.sqrt( a*a + b*b );
+
+      if(c == 0 || minDistance == c) {
+        continue;
+      }
+
+      if(minDistance > c) {
+        minDistance = c
+      }
+
+    }
+  }
+
+  MobileTweenDots(dot);
+
+}
+
+function MobileTweenDots(dot) {
+
+  var randomArray = randomNumber(0, 5)
+
+  var nextX = point[randomArray][0],
+  nextY = point[randomArray][1]
+
+  if(dot.x == widthPoint * 2.5 && nextX == widthPoint * 4.5) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 4.5 && nextX == widthPoint * 2.5) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 2.5 && nextX == widthPoint * 7) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 7 && nextX == widthPoint * 2.5) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 5.5 && nextX == widthPoint * 4.5) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 4.5 && nextX == widthPoint * 5.5) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 5.5 && nextX == widthPoint * 8.5) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 8.5 && nextX == widthPoint * 5.5) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 8.5 && nextX == widthPoint * 7) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  if(dot.x == widthPoint * 7 && nextX == widthPoint * 8.5) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  if(parseInt(dot.x) == parseInt(nextX) && parseInt(dot.y) == parseInt(nextY)) {
+    MobileTweenDots(dot);
+    return;
+  }
+
+  var a = dot.x - nextX;
+  var b = dot.y - nextY;
+
+  var c = Math.sqrt( a*a + b*b );
+
+  var nextTime = c / minDistance
+
+  tweenAni = TweenMax.to(dot, duration * nextTime, {
+    x: point[randomArray][0],
+    y: point[randomArray][1],
+    delay: 0,
+    ease : "Linear",
+    onStart: function() {
+    },
+    onUpdate: function() {
+      stageCtx.clearRect(0,0,stageWidth, stageHeight);
+
+      dot.draw()
+
+      for (var i = 0; i < dotPointX.length; i++) {
+        dot.sdraw(dotPointX[i],dotPointY[i],dotOpacity[i]);
+
+        if(i >= 30) {
+          dotPointX.splice(0,1)
+          dotPointY.splice(0,1)
+        }
+
+      }
+
+      dotPointX.push(dot.x)
+      dotPointY.push(dot.y)
+      dotOpacity.push(opacity)
+      opacity += 0.025
+
+    },
+    onComplete: function() {
+      stageCtx.clearRect(0,0,stageWidth, stageHeight);
+      opacity = 0
+      dotOpacity = []
+      MobileTweenDots(dot);
+    }
+
+  })
+
+}
+
+
+function Dot(type) {
+
+  if(type == 'm') {
+    var rNumber = randomNumber(0, 5)
+  } else {
+    var rNumber = randomNumber(0, 6)
+  }
+
+	var _this = this;
+
+	_this.x = point[rNumber][0];
+	_this.y = point[rNumber][1];
+  _this.opacity = opacity
+
+  this.draw = function() {
+    stageCtx.globalCompositeOperation = 'source-over'
+    stageCtx.beginPath();
+    stageCtx.arc(_this.x, _this.y, circleRadius, 0, 2*Math.PI, false);
+    stageCtx.fillStyle = 'rgba(230,230,230)';
+    stageCtx.fill();
+    }
+
+	this.sdraw = function(x,y,opacity) {
+    stageCtx.globalCompositeOperation = 'source-over'
+    stageCtx.beginPath();
+    stageCtx.arc(x, y, circleRadius, 0, 2*Math.PI, false);
+    stageCtx.fillStyle = 'rgba(185,185,185,alp)'.replace('alp', opacity);
+    stageCtx.fill();
+	}
+}
+
+function randomNumber(min, max) {
+	return Math.floor(Math.random() * (max - min) + min);
+}
+
+</script>
+
+</body>
+</html>

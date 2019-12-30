@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>0427</title>
+  <link rel="stylesheet" type="text/css" href="/node_modules/bootstrap3/dist/css/bootstrap.min.css">
+  <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="/node_modules/bootstrap3/dist/js/bootstrap.min.js"></script>
+<style>
+
+  body {
+    padding-top: 50px;
+    background: #333;
+  }
+
+  .navbar {
+    width: 100vh;
+  }
+
+  .emptyDiv {
+    min-height: 50vh;
+    margin-bottom: 10px;
+    padding: 10px;
+    color: white;
+    text-transform: uppercase;
+  }
+
+  .header_img {
+    height: 40px;
+    width: auto;
+    opacity: 0;
+  }
+
+  .main_img {
+    opacity: 1;
+    top: 40vh;
+    position: absolute;
+  }
+
+  .main {
+    height: 100vh;
+  }
+
+  .main_img_container {
+    top: 70vh;
+  }
+
+  .containerRow {
+    height: 100%;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="container-lg main">
+  <div class="row containerRow">
+    <div class="col-md-4">
+    </div>
+    <div class="col-md-4 center-block main_img_container">
+      <img class="img-responsive main_img" src="/img/Triplet_CI_White.png" alt="item" />
+    </div>
+    <div class="col-md-4">
+    </div>
+  </div>
+</div>
+
+ <div class="emptyDiv"></div>
+ <div class="emptyDiv"></div>
+ <div class="emptyDiv"></div>
+
+<script>
+
+var windowHeight = $(window).height() / 2
+var setIn = null
+
+$(document).ready(function() {
+  divAnimate()
+
+})
+
+function divAnimate() {
+  var mainTop = $(".main_img_container").css("top").replace("px", "")
+
+  if(0 >= parseFloat(mainTop)) {
+    return;
+  } else {
+    $('.main_img_container').animate({
+      top: "-=1vh",
+    }, 0 ,function () {
+      setTimeout(function() { divAnimate()
+      }, 20)
+    })
+  }
+}
+
+</script>
+</body>
+</html>

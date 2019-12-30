@@ -1,0 +1,36 @@
+{
+  "name": "webanimation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/k0102575/webAnimation.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/k0102575/webAnimation/issues"
+  },
+  "homepage": "https://github.com/k0102575/webAnimation#readme",
+  "dependencies": {
+    "aos": "^2.2.0",
+    "bootstrap": "^4.1.1",
+    "bootstrap3": "^3.3.5",
+    "d3": "^5.9.1",
+    "fine-uploader": "^5.16.2",
+    "jquery": "^3.3.1",
+    "jquery-migrate": "^3.0.1",
+    "jquery-ui-dist": "^1.12.1",
+    "jquery.easing": "^1.4.1",
+    "lettering": "^0.4.1",
+    "popper.js": "^1.14.3",
+    "scrollmagic": "^2.0.5",
+    "scrollreveal": "^3.4.0",
+    "textillate": "^0.4.1",
+    "velocity": "^0.7.2"
+  }
+}

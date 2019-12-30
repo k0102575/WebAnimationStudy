@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+  <title>blur</title>
+<style>
+
+body {
+  margin: 0px;
+}
+.backgroundDiv {
+  width: 100vw;
+  height: 100vh;
+  background: url('/img/img2.jpg');
+  background-repeat: no-repeat;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+#canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+</style>
+</head>
+<body>
+  <div class="backgroundDiv">
+    <canvas id="canvas"></canvas>
+  </div>
+
+<script>
+
+$(document).ready(function() {
+  drawCanvas()
+});
+
+var canvas = document.getElementById('canvas');
+var shape = canvas.getContext("2d");
+var x = 100;
+var y = 100;
+var dx = 4.7;
+var dy = 3;
+var t = 1;
+var r = 50;
+var thickness = Math.floor(Math.random() * r/5) + 1;
+var width = $(".backgroundDiv").width();
+var height = $(".backgroundDiv").height();
+canvas.width = width;
+canvas.height = height;
+
+function drawCanvas() {
+  move();
+}
+
+function draw() {
+
+  shape.clearRect(0,0,canvas.width,canvas.height);
+  // shape.filter = 'blur(10px)';
+  shape.globalCompositeOperation = "source-over";
+
+  shape.fillStyle = "rgb(255,255,255,0.5)";
+  shape.fillRect(0,0,canvas.width,canvas.height);
+
+  shape.globalCompositeOperation = "destination-out";
+
+  // shape.clearRect(0,0,width,height);
+  shape.beginPath();
+  shape.fillStyle = '#ffffff';
+  // shape.strokeStyle = RGB;
+  shape.lineWidth = thickness;
+  shape.arc(x,y,r,0,Math.PI*2, true);
+  shape.closePath();
+  shape.fill();
+  shape.stroke();
+
+  if (x<0 || x>width) { dx = -dx };
+  if (y<0 || y>height) { dy = -dy};
+  x += dx;
+  y += dy;
+}
+
+function move() {
+  setInterval(draw, t);
+}
+
+</script>
+
+</body>
+</html>
